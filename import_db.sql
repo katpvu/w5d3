@@ -1,5 +1,12 @@
 PRAGMA foreign_keys = ON;
 
+DROP TABLE question_follows;
+DROP TABLE question_likes;
+DROP TABLE replies;
+DROP TABLE questions;
+DROP TABLE users;
+
+
 CREATE TABLE users (
     id INTEGER PRIMARY KEY,
     fname TEXT NOT NULL,
@@ -26,7 +33,7 @@ CREATE TABLE replies (
     body TEXT NOT NULL,
     question_id INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
-    reply_id INTEGER NOT NULL REFERENCES replies(id),
+    reply_id INTEGER REFERENCES replies(id),
     
     FOREIGN KEY (question_id) REFERENCES questions(id),
     FOREIGN KEY (user_id) REFERENCES users(id)
@@ -34,7 +41,7 @@ CREATE TABLE replies (
 
 CREATE TABLE question_likes (
     id INTEGER PRIMARY KEY,
-    question_like BOOLEAN,
+    question_like INTEGER NOT NULL,
     user_id INTEGER NOT NULL,
     question_id INTEGER NOT NULL,
 
@@ -59,14 +66,21 @@ INSERT INTO
     question_follows (user_id, question_id)
 VALUES
     (1, 1),
+    (2, 1),
     (2, 2);
 
 INSERT INTO 
     replies (body, question_id, user_id, reply_id)
 VALUES
-    ("response_1", 1, 1, 1);
+    ("response_1", 1, 1, NULL),
+    ("response_2", 1, 1, 1),
+    ("response_3", 1, 1, 2),
+    ("response_4", 1, 2, 2),
+    ("response_5", 2, 2, NULL);
 
 INSERT INTO
     question_likes (question_like, user_id, question_id)
 VALUES
-    (true, 1, 1);
+    (true, 1, 1),
+    (true, 2, 1),
+    (true, 2, 2);
